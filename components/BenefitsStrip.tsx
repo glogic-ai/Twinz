@@ -62,7 +62,7 @@ export default function BenefitsStrip() {
             (904) 719-1240
           </a>
           <a
-            href="#quote"
+            href="/quote"
             className="mt-4 inline-flex rounded-full border border-[#c89b3c] px-5 py-2 text-sm font-semibold text-[#c89b3c] transition hover:bg-[#c89b3c] hover:text-black"
           >
             Get a Quote
