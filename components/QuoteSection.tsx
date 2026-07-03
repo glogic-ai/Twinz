@@ -27,41 +27,45 @@ export default function QuoteSection() {
     }));
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
+async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  e.preventDefault();
+  setLoading(true);
+  setMessage("");
 
-    try {
-      const res = await fetch("/api/quote", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
+  try {
+    const res = await fetch("/api/quote", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
 
-      const json = await res.json();
+    const json = await res.json();
 
-      if (!res.ok || !json.ok) {
-        setMessage(json.error || "Something went wrong.");
-        return;
-      }
-
-      setMessage("Quote request submitted successfully.");
-
-      setValues({
-        name: "",
-        phone: "",
-        service_needed: "",
-        project_details: "",
-      });
-    } catch (error) {
-      setMessage("Unable to submit quote right now.");
-    } finally {
-      setLoading(false);
+    if (!res.ok || !json.ok) {
+      setMessage(json.error || "Something went wrong. Please try again.");
+      return;
     }
+
+    // Use the message from the API, or a fallback
+    setMessage(
+      json.message ||
+        "Thanks for reaching out. A team member will contact you shortly.",
+    );
+
+    setValues({
+      name: "",
+      phone: "",
+      service_needed: "",
+      project_details: "",
+    });
+  } catch (error) {
+    setMessage("Unable to submit quote right now. Please call or text us.");
+  } finally {
+    setLoading(false);
   }
+}
 
   return (
     <section id="quote" className="w-full px-6 py-16 md:px-10 lg:px-16">

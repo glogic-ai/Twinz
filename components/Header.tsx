@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 
 const navItems = [
@@ -12,72 +13,112 @@ const navItems = [
 ];
 
 export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <header className="sticky top-0 z-40 border-b border-[#1f1f1f] bg-black/95 text-white backdrop-blur-sm">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-        {/* Left: logo + nav */}
-        <div className="flex items-center gap-8">
-          {/* Logo image from /public/twinz.jpg */}
-          <div className="flex items-center gap-3">
-            <div className="relative h-10 w-32">
-              <Image
-                src="/twinz.jpg"
-                alt="Twins Customs logo"
-                fill
-                className="object-contain"
-                sizes="128px"
-                priority
-              />
-            </div>
-          </div>
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+        <a href="/" className="flex min-w-0 items-center gap-3">
+          <Image
+            src="/twinz.jpg"
+            alt="Twinz Customs"
+            width={140}
+            height={48}
+            className="h-10 w-auto sm:h-12"
+            priority
+          />
+        </a>
 
-          {/* Desktop nav */}
-          <nav className="hidden items-center gap-6 text-[0.7rem] font-semibold tracking-[0.18em] sm:flex">
-            {navItems.map((item, index) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className={`relative pb-1 uppercase ${
-                  index === 0
-                    ? "text-[#f4c76a]"
-                    : "text-slate-100/80 hover:text-white"
-                }`}
-              >
-                {item.label}
-                {index === 0 && (
-                  <span className="absolute left-0 top-full mt-1 h-[2px] w-full bg-[#f4c76a]" />
-                )}
-              </a>
-            ))}
-          </nav>
-        </div>
-
-        {/* Right: hours, phone, CTA */}
-        <div className="flex items-center gap-4 text-[0.7rem] font-semibold">
-          <div className="hidden items-center gap-2 text-[#f4c76a] sm:flex">
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-[#f4c76a]/40 text-[0.65rem]">
-              ⏱
-            </span>
-            <span>Mon - Sat: 9AM - 6PM</span>
-          </div>
-
-          <div className="hidden items-center gap-2 text-[#f4c76a] sm:flex">
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-[#f4c76a]/40 text-[0.65rem]">
-              ☎
-            </span>
-            <a href="tel:+19047191240" className="hover:text-[#ffd88d]">
-              (904) 719-1240
+        <nav className="hidden items-center gap-6 lg:flex">
+          {navItems.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              className="text-sm font-medium text-white/80 transition hover:text-[#c89b3c]"
+            >
+              {item.label}
             </a>
-          </div>
+          ))}
+        </nav>
 
+        <div className="hidden items-center gap-4 lg:flex">
           <a
-            href="/quote"
-            className="inline-flex min-w-[220px] items-center justify-center rounded-md bg-[#00b7d6] px-8 py-4 text-base font-extrabold uppercase tracking-[0.12em] text-white transition hover:bg-[#0cc6e7]"
+            href="tel:9047191240"
+            className="text-sm font-semibold text-white transition hover:text-[#c89b3c]"
+          >
+            (904) 719-1240
+          </a>
+          <a
+            href="#quote"
+            className="inline-flex rounded-full border border-[#c89b3c] px-5 py-2 text-sm font-semibold text-[#c89b3c] transition hover:bg-[#c89b3c] hover:text-black"
           >
             Get a Quote
           </a>
         </div>
+
+        <button
+          type="button"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((prev) => !prev)}
+          className="inline-flex items-center justify-center rounded-md border border-white/15 p-2 text-white transition hover:border-[#c89b3c] hover:text-[#c89b3c] lg:hidden"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="1.8"
+          >
+            {menuOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
+          </svg>
+        </button>
       </div>
+
+      {menuOpen && (
+        <div className="border-t border-white/10 bg-black lg:hidden">
+          <nav className="mx-auto flex w-full max-w-7xl flex-col px-4 py-4 sm:px-6">
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                className="border-b border-white/10 py-3 text-sm font-medium text-white/85 transition hover:text-[#c89b3c]"
+              >
+                {item.label}
+              </a>
+            ))}
+
+            <a
+              href="tel:9047191240"
+              className="mt-4 text-sm font-semibold text-white"
+            >
+              (904) 719-1240
+            </a>
+
+            <a
+              href="#quote"
+              onClick={() => setMenuOpen(false)}
+              className="mt-4 inline-flex w-full items-center justify-center rounded-full border border-[#c89b3c] px-5 py-3 text-sm font-semibold text-[#c89b3c] transition hover:bg-[#c89b3c] hover:text-black"
+            >
+              Get a Quote
+            </a>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

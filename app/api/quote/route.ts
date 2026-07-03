@@ -14,8 +14,8 @@ export async function POST(request: Request) {
 
     if (!name || !phone || !service_needed) {
       return NextResponse.json(
-        { ok: false, error: "Name, phone, and service are required" },
-        { status: 400 }
+        { ok: false, error: "Name, phone, and service are required." },
+        { status: 400 },
       );
     }
 
@@ -34,23 +34,26 @@ export async function POST(request: Request) {
 
     if (error) {
       console.error("Supabase insert error:", error);
-
       return NextResponse.json(
-        { ok: false, error: "Failed to save quote" },
-        { status: 500 }
+        { ok: false, error: "Failed to save quote." },
+        { status: 500 },
       );
     }
 
     return NextResponse.json(
-      { ok: true, quote: data },
-      { status: 201 }
+      {
+        ok: true,
+        message:
+          "Thanks for reaching out. A team member will contact you shortly.",
+        quote: data,
+      },
+      { status: 201 },
     );
   } catch (err: any) {
     console.error("Quote POST error:", err);
-
     return NextResponse.json(
-      { ok: false, error: "Invalid request body" },
-      { status: 400 }
+      { ok: false, error: "Invalid request body." },
+      { status: 400 },
     );
   }
 }
