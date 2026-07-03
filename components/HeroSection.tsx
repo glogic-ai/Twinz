@@ -49,7 +49,7 @@ export default function HeroSection() {
                 href="#contact"
                 className="inline-flex min-w-[220px] items-center justify-center rounded-md bg-[#00b7d6] px-8 py-4 text-base font-extrabold uppercase tracking-[0.12em] text-white transition hover:bg-[#0cc6e7]"
               >
-                Get a Quote
+                Contact Us
               </a>
 
               <a

@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/BenefitsStrip";
+import BenefitsStrip from "@/components/BenefitsStrip";
+import ChatbotWidget from "@/components/ChatbotWidget";
 
 export const metadata: Metadata = {
   title: "Twins Customs",
@@ -14,7 +18,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-black text-white antialiased">{children}</body>
+      <body className="bg-black text-white antialiased">
+        <Header />{children} <BenefitsStrip /> <ChatbotWidget /></body>
     </html>
   );
 }

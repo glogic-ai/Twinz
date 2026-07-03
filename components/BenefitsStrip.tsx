@@ -14,62 +14,59 @@ const benefits = [
   {
     title: "Satisfaction Guaranteed",
     text: "We stand behind our work.",
-    icon: "/benefit-icons/satisfaction-guaranteed.png",
+    icon: "/benefit-icons/satisfaction.png",
   },
   {
     title: "Locally Owned",
     text: "Proudly serving our community.",
-    icon: "/benefit-icons/locally-owned.png",
+    icon: "/benefit-icons/localowned.png",
   },
 ];
 
 export default function BenefitsStrip() {
   return (
-    <section className="border-b border-[#1b1b1b] bg-[#050505] py-4 text-white">
-      <div className="mx-auto flex max-w-[1600px] flex-col gap-6 px-6 lg:flex-row lg:items-center lg:justify-between">
-        {/* Left: four benefits */}
-        <div className="flex flex-1 flex-wrap items-center gap-6">
+    <section className="border-y border-white/10 bg-black text-white">
+      <div className="mx-auto flex max-w-7xl flex-col lg:flex-row">
+        <div className="grid flex-1 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
           {benefits.map((item) => (
-            <div key={item.title} className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#4a3416] bg-black/50 p-2">
-                {/* Placeholder icon; replace with your rendered benefit icons */}
-                <Image
-                  src={item.icon}
-                  alt={item.title}
-                  width={28}
-                  height={28}
-                  className="h-7 w-7 object-contain"
-                />
-              </div>
-              <div>
-                <p className="text-[0.75rem] font-extrabold uppercase tracking-[0.18em] text-[#f4c76a]">
+            <div
+              key={item.title}
+              className="flex items-center gap-4 border-white/10 px-6 py-5 xl:border-r"
+            >
+              <Image
+                src={item.icon}
+                alt={item.title}
+                width={64}
+                height={64}
+                className="h-14 w-auto shrink-0"
+              />
+
+              <div className="min-w-0">
+                <h3 className="text-sm font-extrabold uppercase tracking-[0.16em] text-[#c89b3c]">
                   {item.title}
-                </p>
-                <p className="text-[0.7rem] text-white/70">{item.text}</p>
+                </h3>
+                <p className="mt-1 text-sm text-white/75">{item.text}</p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Divider */}
-        <div className="hidden h-10 w-px bg-white/10 lg:block" />
-
-        {/* Right: call and CTA */}
-        <div className="flex flex-col items-start gap-3 lg:flex-row lg:items-center lg:gap-6">
-          <div className="text-left lg:text-right">
-            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-[#f4c76a]">
-              Have questions? Call us now!
-            </p>
-            <p className="text-lg font-extrabold tracking-wide text-[#f4c76a]">
-              (904) 719‑1240
-            </p>
-          </div>
-            <a
-            href="/quote"
-            className="inline-flex items-center justify-center rounded-sm border border-[#00b7d6] px-5 py-2.5 text-[0.7rem] font-extrabold uppercase tracking-[0.18em] text-[#00b7d6] hover:bg-[#00b7d6] hover:text-black"
-            >
+        <div className="border-t border-white/10 px-6 py-5 lg:min-w-[280px] lg:border-l lg:border-t-0">
+          <p className="text-sm uppercase tracking-[0.14em] text-[#c89b3c]">
+            Have questions? Call us now!
+          </p>
+          <a
+            href="tel:9047191240"
+            className="mt-2 block text-2xl font-bold text-white"
+          >
+            (904) 719-1240
+          </a>
+          <a
+            href="#quote"
+            className="mt-4 inline-flex rounded-full border border-[#c89b3c] px-5 py-2 text-sm font-semibold text-[#c89b3c] transition hover:bg-[#c89b3c] hover:text-black"
+          >
             Get a Quote
-            </a>
+          </a>
         </div>
       </div>
     </section>

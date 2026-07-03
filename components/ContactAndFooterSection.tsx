@@ -27,7 +27,7 @@ export default function ContactAndFooterSection() {
                   href="tel:+1602twin2020"
                   className="mt-2 inline-block text-base font-semibold text-[#00b7d6] hover:text-[#0cc6e7]"
                 >
-                  (602) TWIN-2020
+                  (904) 719-1240
                 </a>
               </div>
 

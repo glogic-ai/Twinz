@@ -1,50 +1,176 @@
+"use client";
+
+import { useState } from "react";
+
+type QuoteFormValues = {
+  name: string;
+  phone: string;
+  service_needed: string;
+  project_details: string;
+};
+
 export default function QuoteSection() {
+  const [values, setValues] = useState<QuoteFormValues>({
+    name: "",
+    phone: "",
+    service_needed: "",
+    project_details: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  function updateField(field: keyof QuoteFormValues, value: string) {
+    setValues((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const res = await fetch("/api/quote", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const json = await res.json();
+
+      if (!res.ok || !json.ok) {
+        setMessage(json.error || "Something went wrong.");
+        return;
+      }
+
+      setMessage("Quote request submitted successfully.");
+
+      setValues({
+        name: "",
+        phone: "",
+        service_needed: "",
+        project_details: "",
+      });
+    } catch (error) {
+      setMessage("Unable to submit quote right now.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <section id="quote" className="bg-neutral-950 px-6 py-20 lg:px-8">
-      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-400">
+    <section id="quote" className="w-full px-6 py-16 md:px-10 lg:px-16">
+      <div className="mx-auto max-w-3xl rounded-2xl border border-white/10 bg-black/40 p-6 text-white shadow-xl backdrop-blur md:p-8">
+        <div className="mb-8">
+          <p className="mb-2 text-sm uppercase tracking-[0.2em] text-red-400">
             Lead capture
           </p>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-            Make it easy to ask for a quote in under a minute.
+          <h2 className="mb-3 text-3xl font-bold md:text-4xl">
+            Request a Quote
           </h2>
-          <p className="mt-4 text-lg leading-8 text-white/70">
-            This section can connect to Supabase later so every request gets saved in a dashboard,
-            emailed to the business, and handed to the chatbot for follow-up.
+          <p className="max-w-2xl text-sm text-white/70 md:text-base">
+            Make it easy to ask for a quote in under a minute.
+          </p>
+          <p className="mt-3 max-w-2xl text-sm text-white/60">
+            This section now connects to Supabase so every request can be saved
+            and reviewed later.
           </p>
         </div>
 
-        <form className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="text-sm text-white/80">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="mb-2 block text-sm font-medium text-white/90">
               Name
-              <input className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none ring-0 placeholder:text-white/30" placeholder="Your name" />
             </label>
-            <label className="text-sm text-white/80">
-              Phone
-              <input className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none ring-0 placeholder:text-white/30" placeholder="Best contact number" />
-            </label>
-            <label className="text-sm text-white/80 sm:col-span-2">
-              Service Needed
-              <select className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none ring-0">
-                <option>Window Tint</option>
-                <option>Vinyl Wrap</option>
-                <option>Commercial Graphics</option>
-                <option>Not Sure Yet</option>
-              </select>
-            </label>
-            <label className="text-sm text-white/80 sm:col-span-2">
-              Project Details
-              <textarea className="mt-2 min-h-[140px] w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none ring-0 placeholder:text-white/30" placeholder="Vehicle type, goals, timeline, preferred look, etc." />
-            </label>
+            <input
+              type="text"
+              value={values.name}
+              onChange={(e) => updateField("name", e.target.value)}
+              placeholder="Your name"
+              className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 outline-none transition focus:border-red-400"
+              required
+            />
           </div>
-          <button
-            type="submit"
-            className="mt-6 inline-flex rounded-full bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-400"
-          >
-            Send Quote Request
-          </button>
+
+          <div>
+            <label className="mb-2 block text-sm font-medium text-white/90">
+              Phone
+            </label>
+            <input
+              type="tel"
+              value={values.phone}
+              onChange={(e) => updateField("phone", e.target.value)}
+              placeholder="Your phone number"
+              className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 outline-none transition focus:border-red-400"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="mb-3 block text-sm font-medium text-white/90">
+              Service Needed
+            </label>
+            <div className="grid gap-3 md:grid-cols-2">
+              {[
+                "Window Tint",
+                "Vinyl Wrap",
+                "Commercial Graphics",
+                "Not Sure Yet",
+              ].map((service) => (
+                <label
+                  key={service}
+                  className={`flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-sm transition ${
+                    values.service_needed === service
+                      ? "border-red-400 bg-red-500/10 text-white"
+                      : "border-white/15 bg-white/5 text-white/80 hover:border-white/30"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="service_needed"
+                    value={service}
+                    checked={values.service_needed === service}
+                    onChange={(e) =>
+                      updateField("service_needed", e.target.value)
+                    }
+                    className="h-4 w-4 accent-red-500"
+                    required
+                  />
+                  <span>{service}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-medium text-white/90">
+              Project Details
+            </label>
+            <textarea
+              value={values.project_details}
+              onChange={(e) => updateField("project_details", e.target.value)}
+              placeholder="Tell us about the project, vehicle, goals, or timeline."
+              rows={5}
+              className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 outline-none transition focus:border-red-400"
+            />
+          </div>
+
+          <div className="pt-2">
+            <button
+              type="submit"
+              disabled={loading}
+              className="inline-flex w-full items-center justify-center rounded-xl bg-red-600 px-6 py-3 font-semibold text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loading ? "Sending..." : "Send Quote Request"}
+            </button>
+          </div>
+
+          {message && <p className="text-sm text-white/80">{message}</p>}
         </form>
       </div>
     </section>
